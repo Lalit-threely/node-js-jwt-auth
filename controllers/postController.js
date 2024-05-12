@@ -5,6 +5,7 @@ exports.createPost = async (req, res) => {
     try {
         const post = new Post(req.body);
         await post.save();
+        console.log(post)
         res.status(201).json(post);
     } catch (err) {
         res.status(400).json({ message: err.message });
