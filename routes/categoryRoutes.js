@@ -1,4 +1,4 @@
-const { createCategory, createSubCategory, addProduct, getCategoryList, getSubCategoryList, getProductList, getCategoryData, updateCategory, updateProduct } = require('../controllers/categoryController.js');
+const { createCategory, createSubCategory, addProduct, getCategoryList, getSubCategoryList, getProductList, getCategoryData, updateCategory, updateProduct, deleteCategory, deleteProduct } = require('../controllers/categoryController.js');
 
 const { Router } = require('express');
 const adminAuth = require('../middleware/adminAuth.js');
@@ -13,6 +13,8 @@ router.get('/', adminAuth, getCategoryList);
 router.get('/product/:categoryId/', adminAuth, getCategoryData);
 router.post('/update', adminAuth, updateCategory);
 router.post('/product/update', adminAuth, updateProduct);
+router.delete('/categories/:categoryId', deleteCategory);
+router.delete('/categories/:categoryId/products/:productId', deleteProduct);
 
 module.exports = router;
 
