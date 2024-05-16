@@ -159,16 +159,17 @@ const updateProduct = async (req, res) => {
 const deleteCategory = async (req, res) => {
     try {
         const { categoryId } = req.params;
-        const category = await Category.findById(categoryId);
-        if (!category) {
+        const result = await Category.deleteOne({ _id: categoryId });
+        if (result.deletedCount === 0) {
             return res.status(404).json({ message: "Category not found.", success: false });
         }
-        await category.remove();
         res.status(200).json({ message: "Category deleted successfully.", success: true });
     } catch (err) {
         res.status(500).json({ error: err.message, success: false });
     }
 }
+
+
 
 const deleteProduct = async (req, res) => {
     try {

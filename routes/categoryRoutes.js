@@ -13,7 +13,7 @@ router.get('/', adminAuth, getCategoryList);
 router.get('/product/:categoryId/', adminAuth, getCategoryData);
 router.post('/update', adminAuth, updateCategory);
 router.post('/product/update', adminAuth, updateProduct);
-router.delete('/:categoryId', deleteCategory);
-router.delete('/:categoryId/products/:productId', deleteProduct);
+router.delete('/:categoryId', adminAuth , deleteCategory);
+router.delete('/:categoryId/products/:productId',adminAuth, deleteProduct);
 
 module.exports = router;
