@@ -2,24 +2,16 @@ const Category = require('../models/category.js');
 
 const createCategory = async (req, res) => {
     try {
-        const { name, imageUrl } = req.body;
-        const data = await Category.find({ name: name });
-        if (data.length > 0) {
-            return res.status(400).json({ message: "category already exists. ", success: false });
-        }
-        const newCategory = new Category({
-            name,
-            imageUrl,
-            products: []
-            // subCategory: []
-        });
-
-        const savedCategory = await newCategory.save();
-        res.status(201).json({ ...savedCategory, success: true });
+        const post = new Category(req.body);
+        await post.save();
+        res.status(201).json(post);
     } catch (err) {
-        res.status(500).json({ error: err.message, success: false });
+        res.status(400).json({ message: err.message });
     }
+   
 }
+
+
 
 const createSubCategory = async (req, res) => {
     try {
