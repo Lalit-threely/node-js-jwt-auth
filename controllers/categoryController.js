@@ -2,16 +2,23 @@ const Category = require('../models/category.js');
 
 const createCategory = async (req, res) => {
     try {
-        const post = new Category(req.body);
-        await post.save();
-        res.status(201).json(post);
+        const { name, imageUrl } = req.body;
+        const data = await Category.find({ name: name });
+        if (data.length > 0) {
+            return res.status(400).json({ message: "category already exists. ", success: false });
+        }
+        const newCategory = new Category({
+            name,
+            imageUrl,
+            products: []
+            // subCategory: []
+        });
+        const savedCategory = await newCategory.save();
+        res.status(201).json({ ...savedCategory, success: true });
     } catch (err) {
-        res.status(400).json({ message: err.message });
+        res.status(500).json({ error: err.message, success: false });
     }
-   
 }
-
-
 
 const createSubCategory = async (req, res) => {
     try {
@@ -116,9 +123,13 @@ const updateCategory = async (req, res) => {
         if (!category) {
             return res.status(404).json({ message: "Category not found.", success: false });
         }
-        category.name = name;
-        category.imageUrl = imageUrl;
-        category.products = products;
+        if (name)
+            category.name = name;
+        if (imageUrl)
+            category.imageUrl = imageUrl;
+        if (products)
+            category.products = products;
+
         const savedCategory = await category.save();
         res.status(200).json({ ...savedCategory, success: true });
     } catch (err) {
@@ -146,8 +157,6 @@ const updateProduct = async (req, res) => {
     }
 }
 
-
-
 const deleteCategory = async (req, res) => {
     try {
         const { categoryId } = req.params;
@@ -160,8 +169,6 @@ const deleteCategory = async (req, res) => {
         res.status(500).json({ error: err.message, success: false });
     }
 }
-
-
 
 const deleteProduct = async (req, res) => {
     try {
@@ -182,15 +189,5 @@ const deleteProduct = async (req, res) => {
     }
 }
 
-module.exports = { 
-    updateProduct, 
-    createCategory, 
-    createSubCategory, 
-    addProduct, 
-    getCategoryList, 
-    getSubCategoryList, 
-    getCategoryData, 
-    updateCategory,
-    deleteCategory,
-    deleteProduct
-};
+
+module.exports = { deleteCategory, deleteProduct, updateProduct, createCategory, createSubCategory, addProduct, getCategoryList, getSubCategoryList, getCategoryData, updateCategory };
