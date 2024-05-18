@@ -5,6 +5,7 @@ require("dotenv").config({ path: ".env" });
 const userRouter = require("./routes/userRoutes");
 const postRouter = require("./routes/postRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const postAdminRoutes = require('./routes/postAdminRoutes')
 const categoryRoutes = require("./routes/categoryRoutes");
 const AppError = require("./utils/error");
 const errorHandler = require("./middleware/errorHandler");
@@ -32,6 +33,7 @@ app.use((req, res, next) => {
 
 app.use("/api/users", userRouter);
 app.use("/api/posts", postRouter)
+app.use("/api/admin/posts", postAdminRoutes)
 app.use("/api/admin", adminRoutes);
 app.use('/api/category', categoryRoutes);
 app.use(cors())
