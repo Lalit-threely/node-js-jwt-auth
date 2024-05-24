@@ -7,8 +7,8 @@ const router = Router();
 
 router.post('/create', adminAuth, createCategory);
 router.post('/product/create', adminAuth, addProduct);
-router.get('/', adminAuth, getCategoryList);
-router.get('/product/:categoryId/', adminAuth, getCategoryData);
+router.get('/', getCategoryList);
+router.get('/product/:categoryId/', getCategoryData);
 router.post('/update', adminAuth, updateCategory);
 router.post('/product/update', adminAuth, updateProduct);
 router.delete('/:categoryId', adminAuth, deleteCategory);
