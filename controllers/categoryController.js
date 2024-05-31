@@ -20,6 +20,21 @@ const createCategory = async (req, res) => {
     }
 }
 
+async function getProductListByCategoryName(req, res) {
+    try {
+        const { categoryName } = req.params;
+        console.log(categoryName);
+        const result = await Category.findOne({ name: categoryName });
+        console.log(result);
+        if (!result) {
+            return res.status(404).json({ message: "Category not found.", success: false });
+        }
+        res.status(200).json(result.products);
+    } catch (err) {
+        res.status(500).json({ error: err.message, success: false });
+    }
+}
+
 const createSubCategory = async (req, res) => {
     try {
         const { name, categoryId } = req.body;
@@ -190,4 +205,4 @@ const deleteProduct = async (req, res) => {
 }
 
 
-module.exports = { deleteCategory, deleteProduct, updateProduct, createCategory, createSubCategory, addProduct, getCategoryList, getSubCategoryList, getCategoryData, updateCategory };
+module.exports = { getProductListByCategoryName, deleteCategory, deleteProduct, updateProduct, createCategory, createSubCategory, addProduct, getCategoryList, getSubCategoryList, getCategoryData, updateCategory };
