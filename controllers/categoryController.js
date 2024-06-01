@@ -185,6 +185,19 @@ const deleteCategory = async (req, res) => {
     }
 }
 
+async function getCategoryByProductName(req, res) {
+    try {
+        const { productName } = req.body;
+        const category = await Category.findOne({ products: { $elemMatch: { name: productName } } });
+        if (!category) {
+            return res.status(404).json({ message: "Category not found.", success: false });
+        }
+        res.status(200).json({categoryName: category.name, categoryId: category.id});
+    } catch (err) {
+        return res.status(500).json({ message: "Error while finding querry", success: false, error: err })
+    }
+}
+
 const deleteProduct = async (req, res) => {
     try {
         const { categoryId, productId } = req.params;
@@ -205,4 +218,4 @@ const deleteProduct = async (req, res) => {
 }
 
 
-module.exports = { getProductListByCategoryName, deleteCategory, deleteProduct, updateProduct, createCategory, createSubCategory, addProduct, getCategoryList, getSubCategoryList, getCategoryData, updateCategory };
+module.exports = { getCategoryByProductName, getProductListByCategoryName, deleteCategory, deleteProduct, updateProduct, createCategory, createSubCategory, addProduct, getCategoryList, getSubCategoryList, getCategoryData, updateCategory };
