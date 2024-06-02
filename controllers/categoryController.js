@@ -192,9 +192,53 @@ async function getCategoryByProductName(req, res) {
         if (!category) {
             return res.status(404).json({ message: "Category not found.", success: false });
         }
-        res.status(200).json({categoryName: category.name, categoryId: category.id});
+        res.status(200).json({ categoryName: category.name, categoryId: category.id });
     } catch (err) {
         return res.status(500).json({ message: "Error while finding querry", success: false, error: err })
+    }
+}
+
+async function getProductByName(req, res) {
+    console.log("Received request to get product by name");
+
+    try {
+        const { query } = req.body;
+        console.log("Query parameter:", query);
+
+        // Assuming 'Category' is a mongoose model and has a 'products' field that is an array
+        const categories = await Category.find(); // Fetch all categories or add specific criteria if needed
+
+        if (!categories || categories.length === 0) {
+            console.log("No categories found");
+            return res.status(404).json({ message: "No categories found", success: false });
+        }
+        let response = {
+            products: [],
+            category: [],
+        };
+        for (const category of categories) {
+            const filtered = category.products.filter(product =>
+                product.name.toLowerCase().includes(query.toLowerCase())
+            );
+            if (filtered.length > 0) {
+                response = {
+                    products: [...response.products, ...filtered],
+                    category: [...response.category, { name: category.name, id: category.id }],
+                }
+            }
+        }
+        if (response.products.length > 0) {
+            return res.status(200).json({ categories: response.category, products: response.products, success: true });
+        }
+        else {
+            return res.status(404).json({ message: "Product not found.", success: false });
+        }
+
+        console.log("Product not found");
+        return res.status(404).json({ message: "Product not found.", success: false });
+    } catch (err) {
+        console.error("Error while executing query:", err);
+        return res.status(500).json({ message: "Error while executing query", success: false, error: err });
     }
 }
 
@@ -218,4 +262,4 @@ const deleteProduct = async (req, res) => {
 }
 
 
-module.exports = { getCategoryByProductName, getProductListByCategoryName, deleteCategory, deleteProduct, updateProduct, createCategory, createSubCategory, addProduct, getCategoryList, getSubCategoryList, getCategoryData, updateCategory };
+module.exports = { getProductByName, getCategoryByProductName, getProductListByCategoryName, deleteCategory, deleteProduct, updateProduct, createCategory, createSubCategory, addProduct, getCategoryList, getSubCategoryList, getCategoryData, updateCategory };
