@@ -58,4 +58,26 @@ const enquiry = async (req, res) => {
     }
 }
 
-module.exports = { joinUs, enquiry };
+const contactUs = async (req, res) => {
+    try {
+        const {name, contact, message} = req.body;
+        const mailOptions = {
+            from: contact,
+            to: 'anshyuve@gmail.com', // The recipient's email address
+            subject: `${name} wants to contact Adiray`,
+            text: `Name: ${name}\nContact: ${contact}\nMessage: ${message}`
+        }
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                return res.status(500).json({ error, success:false });
+            }
+            res.status(200).json({ message: 'Email sent successfully', success: true });
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: error, success:false });
+    }
+}
+
+module.exports = { joinUs, enquiry,contactUs };
