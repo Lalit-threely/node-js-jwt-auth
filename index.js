@@ -9,6 +9,7 @@ const postAdminRoutes = require('./routes/postAdminRoutes')
 const categoryRoutes = require("./routes/categoryRoutes");
 const AppError = require("./utils/error");
 const errorHandler = require("./middleware/errorHandler");
+const mailRoutes = require('./routes/mailRoutes');
 const cors = require('cors');
 const app = express();
 
@@ -36,6 +37,7 @@ app.use("/api/posts", postRouter)
 app.use("/api/admin/posts", postAdminRoutes)
 app.use("/api/admin", adminRoutes);
 app.use('/api/category', categoryRoutes);
+app.use('/api/send-mail', mailRoutes);
 app.use(cors())
 
 app.all("*", (req, res, next) => {
