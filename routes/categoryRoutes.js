@@ -1,4 +1,4 @@
-const { getCategoryByProductName, getProductListByCategoryName, deleteCategory, deleteProduct, createCategory, createSubCategory, addProduct, getCategoryList, getSubCategoryList, getProductList, getCategoryData, updateCategory, updateProduct } = require('../controllers/categoryController.js');
+const {getProductByName, getCategoryByProductName, getProductListByCategoryName, deleteCategory, deleteProduct, createCategory, createSubCategory, addProduct, getCategoryList, getSubCategoryList, getProductList, getCategoryData, updateCategory, updateProduct } = require('../controllers/categoryController.js');
 
 const { Router } = require('express');
 const adminAuth = require('../middleware/adminAuth.js');
@@ -14,6 +14,7 @@ router.post('/product/update', adminAuth, updateProduct);
 router.get('/product/name/:categoryName', getProductListByCategoryName);
 router.delete('/:categoryId', adminAuth, deleteCategory);
 router.delete('/:categoryId/product/:productId', adminAuth, deleteProduct);
+router.post('/product/query', getProductByName);
 router.post('/categorybyproduct', getCategoryByProductName);
 
 module.exports = router;
