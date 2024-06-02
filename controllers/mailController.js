@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: process.env.MAIL_USER, // Your email address
+        user: 'adiraycustomer@gmail.com', // Your email address
         pass: 'ubozjfshppvisgzg', // Your email password
 
     }
