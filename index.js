@@ -46,18 +46,18 @@ app.all("*", (req, res, next) => {
 
 app.use(errorHandler);
 
-function hitApi() {
-  axios
-    .get("http://127.0.0.1:10000/")
-    .then((response) => {
-      console.log("API response:", response.data);
-    })
-    .catch((error) => {
-      console.error("Error hitting API:", error);
-    });
-}
-hitApi();
-setInterval(hitApi, 25 * 1000);
+// function hitApi() {
+//   axios
+//     .get("http://127.0.0.1:10000/")
+//     .then((response) => {
+//       console.log("API response:", response.data);
+//     })
+//     .catch((error) => {
+//       console.error("Error hitting API:", error);
+//     });
+// }
+// hitApi();
+// setInterval(hitApi, 25 * 1000);
 
 const PORT = 8080;
 
