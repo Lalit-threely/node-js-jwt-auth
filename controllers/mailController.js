@@ -3,8 +3,8 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'adiraycustomer@gmail.com', // Your email address
-        pass: 'ubozjfshppvisgzg', // Your email password
+        user: process.env.MAIL_USER, // Your email address
+        pass: process.env.MAIL_PASS, // Your email password
 
     }
 });
@@ -17,7 +17,7 @@ const joinUs = async (req, res) => {
         // Setup email data
         const mailOptions = {
             from: contact,
-            to: 'anshyuve@gmail.com', // The recipient's email address
+            to: process.env.MAIL_TO, // The recipient's email address
             subject: `${name} wants to join Adiray`,
             text: `Product Name: ${productName}\nProduct Category: ${productCategory}\nProduct Quantity: ${productQuantity}\n \n${message}\n\nName: ${name}\nContact: ${contact}`
         };
@@ -40,7 +40,7 @@ const enquiry = async (req, res) => {
         const { name, contact, country, productCategory, productName, productQuantity, message } = req.body;
         const mailOptions = {
             from: contact,
-            to: 'anshyuve@gmail.com', // The recipient's email address
+            to: process.env.MAIL_TO, // The recipient's email address
             subject: `${name} wants to enquire about ${productName}`,
             text: `Name: ${name}\nContact: ${contact}\nCountry: ${country}\nProduct Category: ${productCategory}\nProduct Name: ${productName}\nProduct Quantity: ${productQuantity}\nAdditional Comments: ${message}`
         };
@@ -63,7 +63,7 @@ const contactUs = async (req, res) => {
         const {name, contact, message} = req.body;
         const mailOptions = {
             from: contact,
-            to: 'anshyuve@gmail.com', // The recipient's email address
+            to: process.env.MAIL_TO, // The recipient's email address
             subject: `${name} wants to contact Adiray`,
             text: `Name: ${name}\nContact: ${contact}\nMessage: ${message}`
         }
