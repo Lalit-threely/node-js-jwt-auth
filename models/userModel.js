@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema({
     lowercase: true,
     validate: [validator.isEmail, "please provide a valid email !"],
   },
+  pic:{
+    type:String ,
+    default :"https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png"
+  },
   password: {
     type: String,
     required: [true, "please provide a password"],

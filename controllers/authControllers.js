@@ -218,7 +218,10 @@ exports.changePassword = async (req, res, next) => {
 
 exports.loginWithGoogle = async (req, res) => {
   try {
-    const { fullname, email, password } = req.body;
+    const { fullname, email, password ,pic} = req.body;
+    if(!pic){
+      pic = 'https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png'
+    }
 
     if (!fullname || !email || !password) {
       return res.status(400).json({
@@ -253,7 +256,8 @@ exports.loginWithGoogle = async (req, res) => {
       fullname,
       email,
       password,
-      passwordConfirm: password
+      passwordConfirm: password ,
+      pic:pic 
     });
 
     const token = signToken(newUser.id, res);
