@@ -22,6 +22,7 @@ mongoose
     console.log("> DB connection successful ... ");
   });
 
+
 app.use(express.json());
 
 app.use((req, res, next) => {

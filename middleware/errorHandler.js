@@ -6,9 +6,15 @@ const errorHandler = (err, req, res, next) => {
   error.message = err.message;
 
   if (error.code === 11000) {
-    const value = err.message.match(/(["'])(\\?.)*?\1/)[0];
-    const message = ` ${value} : Duplicate Field value entered `;
-    error = new AppError(message, 400);
+    const match = err.message.match(/(["'])(\\?.)*?\1/);
+    if (match) {
+      const value = match[0];
+      const message = ` ${value} : Duplicate Field value entered `;
+      error = new AppError(message, 400);
+    } else {
+      const message = 'Duplicate Field value entered';
+      error = new AppError(message, 400);
+    }
   }
 
   if (error.name === "ValidationError") {
@@ -23,14 +29,12 @@ const errorHandler = (err, req, res, next) => {
   }
 
   if (error.name === "JsonWebTokenError") {
-    const message = new AppError("Invalid token. Please log in again!", 401);
+    const message = "Invalid token. Please log in again!";
     error = new AppError(message, 401);
   }
+
   if (error.name === "TokenExpiredError") {
-    const message = new AppError(
-      "Your token has expired! Please log in again.",
-      401
-    );
+    const message = "Your token has expired! Please log in again.";
     error = new AppError(message, 401);
   }
 

@@ -6,6 +6,8 @@ const {
   forgotPassword,
   resetPassword,
   changePassword,
+  loginWithGoogle,
+
 } = require("../controllers/authControllers");
 const { me, updateMe } = require("../controllers/userControllers");
 
@@ -21,5 +23,5 @@ router.patch("/changePassword", protect, changePassword);
 
 router.get("/me", protect, me);
 router.patch("/updateMe", protect, updateMe);
-
+router.post('/signwithfirebase',loginWithGoogle )
 module.exports = router;

@@ -42,7 +42,7 @@ exports.signup = asyncHandler(async (req, res, next) => {
   }
           // const salt = await bcrypt.genSalt(10);
           // const passwordHash = await bcrypt.hash(password, salt);
-         
+  
 
   const newUser = await User.create({
     fullname,
@@ -215,3 +215,63 @@ exports.changePassword = async (req, res, next) => {
     token,
   });
 };
+
+exports.loginWithGoogle = async (req, res) => {
+  try {
+    const { fullname, email, password } = req.body;
+
+    if (!fullname || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter name, email, and password"
+      });
+    }
+
+    let user = await User.findOne({ email }).select("+password");
+
+    if (user) {
+      if (!(await user.isPasswordCorrect(password, user.password))) {
+        return res.status(401).json({
+          success: false,
+          message: "Incorrect password"
+        });
+      }
+
+      const token = signToken(user.id, res);
+
+      // Remove sensitive fields before sending the user data
+      user.password = undefined;
+
+      return res.status(200).json({
+        success: true,
+        token,
+        user
+      });
+    }
+
+    const newUser = await User.create({
+      fullname,
+      email,
+      password,
+      passwordConfirm: password
+    });
+
+    const token = signToken(newUser.id, res);
+
+    // Remove sensitive fields before sending the user data
+    newUser.password = undefined;
+
+    res.status(201).json({
+      success: true,
+      token,
+      user: newUser
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message
+    });
+  }
+};
+
