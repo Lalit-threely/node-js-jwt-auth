@@ -129,7 +129,7 @@ exports.permissionTo = (...roles) => {
 
 exports.forgotPassword = asyncHandler(async (req, res, next) => {
   const { email } = req.body;
-
+  
   const user = await User.findOne({ email });
 
   if (!user) {
@@ -137,6 +137,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   }
 
   const resetToken = user.createPasswordResetToken();
+
   await user.save({ validateBeforeSave: false });
 
   const resetURL = `${req.protocol}://${req.get(

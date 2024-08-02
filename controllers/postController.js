@@ -11,16 +11,37 @@ exports.createPost = async (req, res) => {
     }
 };
 
+
+// Controller function to get a post by ID or title
+exports.getPostByIdOrTitle = (req, res) => {
+    const { id, title } = req.query;
+  
+    let post;
+  
+    if (title) {
+      post = posts.findOne(p => p.title.toLowerCase() === title.toLowerCase());
+    }else if(id){
+        post = posts.findById(id)
+    }
+    
+  
+    if (post) {
+      res.status(200).json(post);
+    } else {
+      res.status(404).json({ message: 'Post not found' });
+    }
+  };
+
+
+
+  
+
 // Get a post by ID
 exports.getPostById = async (req, res) => {
     try {
         let post;
-        if (req.params.id != null) {
-            post = await Post.findById(req.params.id);
-        }
-        else {
             post = await Post.find();
-        }
+        
         if (!post) {
             return res.status(404).json({ message: 'Post not found' });
         }
