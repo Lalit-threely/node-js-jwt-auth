@@ -13,26 +13,28 @@ exports.createPost = async (req, res) => {
 
 
 // Controller function to get a post by ID or title
-exports.getPostByIdOrTitle = (req, res) => {
-    const { id, title } = req.query;
-  
-    let post;
-  
-    if (title) {
-      post = posts.findOne(p => p.title.toLowerCase() === title.toLowerCase());
-    }else if(id){
-        post = posts.findById(id)
-    }
+exports.getPostByIdOrTitle = async (req, res) => {
+    const { id, title } = req.params;
     
+    let post;
+    try {
+      if (id && title) {
+        post = await Post.findOne({ _id: id, title: new RegExp(title, 'i') });
+      } else if (title) {
+        post = await Post.findOne({ title: new RegExp(title, 'i') });
+      } else if (id) {
+        post = await Post.findById(id);
+      }
   
-    if (post) {
-      res.status(200).json(post);
-    } else {
-      res.status(404).json({ message: 'Post not found' });
+      if (post) {
+        res.status(200).json(post);
+      } else {
+        res.status(404).json({ message: 'Post not found' });
+      }
+    } catch (error) {
+      res.status(500).json({ message: 'An error occurred', error });
     }
   };
-
-
 
   
 
